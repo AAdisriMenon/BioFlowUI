@@ -1,126 +1,110 @@
-# 🧬 BioFlow UI — nf-core Pipeline Assistant
+# 🧬 BioFlow — Genomics for Everyone
 
-A **no-code web application** that lets wet-lab scientists run state-of-the-art
-bioinformatics pipelines (RNA-seq, WES, ChIP-seq, ATAC-seq) and explore results
-— **no bioinformatics knowledge required**.
+> **Run professional genomics pipelines without writing a single line of code.**
+
+BioFlow is a web application that lets wet-lab scientists run [nf-core](https://nf-co.re) bioinformatics pipelines and explore results through an easy point-and-click interface.
 
 ---
 
-## ✅ Quick start (3 commands)
+## ✨ What can BioFlow do?
 
+| Analysis | What it's for |
+|---|---|
+| **RNA-seq** | Find which genes are switched on/off between your samples |
+| **Whole Exome Sequencing** | Find disease-causing mutations in DNA |
+| **ChIP-seq** | Map where proteins bind on DNA |
+| **ATAC-seq** | Find open (active) regions of chromatin |
+
+**Results include:**
+- Volcano plots, PCA plots, MA plots
+- Differentially expressed gene tables (downloadable)
+- Pathway analysis (KEGG, Reactome, GO)
+- QC summary report
+
+---
+
+## 🚀 Run locally in 3 steps
+
+### Step 1 — Get the code
 ```bash
-# 1. Clone / enter the project
-cd bioflow_ui
+git clone https://github.com/YOUR_USERNAME/bioflow.git
+cd bioflow
+```
 
-# 2. Install dependencies
+### Step 2 — Install Python packages
+```bash
 pip install -r requirements.txt
+```
+> Need Python? Download it from [python.org](https://www.python.org/downloads/) (version 3.10 or newer).
 
-# 3. Launch the app
+### Step 3 — Start the app
+```bash
 streamlit run app.py
 ```
-
-The browser will open at **http://localhost:8501** automatically.
-
----
-
-## 📦 Features
-
-| Feature | Description |
-|---|---|
-| Pipeline selector | Choose RNA-seq, WES, ChIP-seq, or ATAC-seq with plain-English explanations |
-| Sample sheet builder | Editable table — no CSV knowledge needed |
-| Parameter configuration | Sensible defaults + plain-language tooltips |
-| Container setup | Docker / Singularity / Conda — auto-generates Nextflow command |
-| Run pipeline | Live log streaming + progress bars |
-| Demo mode | Explore all features with synthetic data, no files needed |
-| Volcano plot | Interactive, labelled, export-ready |
-| PCA plot | Sample clustering visualisation |
-| MA plot | Expression vs fold-change |
-| MultiQC summary | Alignment QC at a glance |
-| Pathway analysis | GSEA + ORA via gseapy (KEGG, Reactome, GO) |
-| Download results | DEG table and pathway results as CSV |
+The app will open in your browser at **http://localhost:8501**
 
 ---
 
-## 🖥️ System requirements
+## ☁️ Deploy on Streamlit Cloud (free, shareable link)
 
-### For the Streamlit UI (this app)
-- Python ≥ 3.10
-- 4 GB RAM
-
-### For actually running pipelines
-- **Java ≥ 11** (required by Nextflow)
-- **Nextflow** — install with: `curl -s https://get.nextflow.io | bash`
-- **Docker** (recommended) OR **Singularity** (for HPC) OR **Conda**
-- RAM: 32 GB for RNA-seq, 64 GB for WES
-- Storage: 100–500 GB per run
+1. Fork this repository to your GitHub account
+2. Go to [share.streamlit.io](https://share.streamlit.io)
+3. Click **New app** → choose your forked repo → set main file to `app.py`
+4. Click **Deploy** — your app will be live at a public URL in ~2 minutes
 
 ---
 
-## 🗂️ Project structure
+## 💻 To actually run pipelines (not demo mode)
+
+BioFlow's demo mode lets you explore all features with synthetic data. To run real analyses on your own FASTQ files, you also need:
+
+| Tool | Purpose | Install |
+|---|---|---|
+| **Java 11+** | Required by Nextflow | [adoptium.net](https://adoptium.net) |
+| **Nextflow** | Pipeline engine | `curl -s https://get.nextflow.io \| bash` |
+| **Docker** | Runs the tools in containers | [docker.com](https://docs.docker.com/get-docker/) |
+
+> **HPC cluster users:** Singularity is supported instead of Docker. Ask your IT team.
+
+---
+
+## 📁 Project structure
 
 ```
-bioflow_ui/
-├── app.py                          # Home page + session state init
-├── nfcore_api.py                   # nf-core REST API + pipeline catalogue
-├── command_builder.py              # Nextflow command generator
-├── docker_check.py                 # Environment prerequisite checker
-├── demo_data.py                    # Synthetic data for demo mode
-├── requirements.txt
-├── README.md
+bioflow/
+├── app.py                          ← Home page (start here)
+├── styles.py                       ← All CSS styling
+├── data.py                         ← Pipeline info & demo data
+├── requirements.txt                ← Python dependencies
+├── .streamlit/
+│   └── config.toml                 ← App theme & settings
 └── pages/
-    ├── 1_🧬_Pipeline_Selector.py   # Choose pipeline
-    ├── 2_📂_Sample_Inputs.py       # Build sample sheet
-    ├── 3_⚙️_Configuration.py       # Set parameters
-    ├── 4_🐳_Container_Setup.py     # Container + command preview
-    ├── 5_▶️_Run_Pipeline.py        # Launch + live logs
-    ├── 6_📊_Results.py             # Volcano, PCA, DEG table
-    └── 7_🔬_Pathway_Analysis.py    # GSEA, ORA, dot plot
+    ├── 1_🧬_Choose_Analysis.py     ← Pick RNA-seq / WES / etc.
+    ├── 2_📂_Your_Samples.py        ← Enter sample names & files
+    ├── 3_⚙️_Settings.py            ← Adjust analysis parameters
+    ├── 4_▶️_Review_and_Run.py      ← Review & launch the pipeline
+    ├── 5_📊_Results.py             ← Volcano, PCA, gene table
+    └── 6_🔬_Pathway_Analysis.py   ← KEGG/Reactome pathway maps
 ```
 
 ---
 
 ## 🧪 Demo mode
 
-Toggle **Demo mode** in the sidebar (ON by default). This lets you:
-- Navigate every page
-- See interactive volcano, PCA, MA plots
-- Run pathway analysis
-- Download result tables
+Demo mode is **ON by default**. It lets you explore the entire application — including interactive plots and pathway analysis — using built-in synthetic data. No files or Nextflow installation required.
 
-…all with **synthetic data**, without any real FASTQ files or Nextflow installed.
+Toggle demo mode **OFF** in the sidebar when you are ready to use your own data.
 
 ---
 
-## 🔬 Using with real data
+## 🤝 Community & support
 
-1. Turn demo mode **OFF** in the sidebar
-2. Make sure **Nextflow + Docker** are installed (Step 4 checks this)
-3. Build your sample sheet with real FASTQ file paths
-4. Click **Launch pipeline** on Step 5
-5. View results on Steps 6 & 7 once finished
+- [nf-core community](https://nf-co.re) — the pipeline developers
+- [nf-core Slack](https://nf-co.re/join/slack) — ask bioinformatics questions
+- [Nextflow docs](https://www.nextflow.io/docs/latest/)
 
 ---
 
-## 🧬 Supported nf-core pipelines
+## 📄 Licence
 
-| Pipeline | nf-core name | Use case |
-|---|---|---|
-| RNA-seq | `nf-core/rnaseq` | Differential gene expression |
-| WES / WGS | `nf-core/sarek` | Variant calling (SNPs, indels) |
-| ChIP-seq | `nf-core/chipseq` | Peak calling, differential binding |
-| ATAC-seq | `nf-core/atacseq` | Chromatin accessibility |
-
----
-
-## 🤝 Community
-
-- [nf-core community](https://nf-co.re)
-- [Nextflow documentation](https://www.nextflow.io/docs/latest/)
-- [nf-core Slack](https://nf-co.re/join/slack)
-
----
-
-## 📄 License
-
-MIT — free to use, modify, and distribute.
+MIT — free to use, modify, and share.
